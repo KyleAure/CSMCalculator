@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">                                                           
+<html lang="en">
+
 <head>
     <title>CSM Calculator and Pattern Generator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 </head>
 <style>
     .jumbotron {
         background-color: cornflowerblue;
         color: aliceblue;
     }
-    .bg-grey {
+
+    .bg-worksheet {
         background-color: gainsboro;
     }
-    .bg-green {
+
+    .bg-diagram {
         background-color: beige;
+    }
+
+    .bg-pattern {
+        background-color:lavender;
     }
 </style>
 
@@ -32,141 +40,235 @@
     </div>
 
     <div class="container">
+        <!-- ROW - Worksheet and Diagram -->
         <div class="row">
-            <div class="col bg-grey" id="worksheet">
+            <!-- COLUMN - Worksheet -->
+            <div class="col bg-worksheet" id="worksheet">
                 <h2>Worksheet</h2>
 
                 <p>
-                    This Worksheet will help you set your gauge for your sock, and determine the number 
-                    of rows for the instep, and heel. 
+                    This Worksheet will help you set your gauge for your sock, and determine the number
+                    of rows for the instep, and heel.
                 </p>
 
                 <div id="accordion">
                     <!-- Card 1 -->
                     <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="mb-0">
-                        <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Tell us about the foot and desired sock
-                        </button>
-                        </h5>
-                    </div>
-                
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                        <div class="card-body">
-                            <p>This will give us the overall anatomy of the finished sock</p>
-                            <div class="form-group">
-                                <label for="input-cuff-length">Target cuff length (inches):</label>
-                                <input id="input-cuff-length" name="cuff-length" type="number" class="form-control"  placeholder="2" />
-                                <small id="cuff-length-help" class="form-text text-muted">A cuff can be above the ankle on long socks or on the ankle for ankle socks. If no cuff is desired enter 0.</small>
-                            </div>
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                    aria-expanded="true" aria-controls="collapseOne">
+                                    Tell us about the foot and desired sock
+                                </button>
+                            </h5>
+                        </div><!-- Card 1 - heading-->
 
-                            <div class="form-group">
-                                <label for="input-cuff-style">Target cuff style:</label>
-                                <select id="input-cuff-style" name="cuff-style" >
-                                    <option>None</option>
-                                    <option>Rolled</option>
-                                    <option>Ribbed</option>
-                                    <option>Mock Ribbed</option>
-                                </select>
-                            </div>
-                
-                            <div class="form-group">
-                                <label for="input-ankle-length">Target ankle length (inches):</label>
-                                <input id="input-ankle-length" name="ankle-length" type="number" class="form-control"  placeholder="2" />
-                                <small id="ankle-length-help" class="form-text text-muted">This is the amount of fabric between the cuff and the heel. If no ankle is desired enter 0.</small>
-                            </div>
-                
-                            <div class="form-check">
-                                <input id="input-extra-heel" type="checkbox" class="form-check-input" />
-                                <label for="input-extra-heel" class="form-check-label">Larger heel</label>
-                                <small id="extra-heel-help" class="form-text text-muted">Increases the amount of fabric used to create the heel for those who have larger heels.</small>
-                            </div>
-                
-                            <div class="form-group">
-                                <label for="input-foot-length">Target foot length (inches):</label>
-                                <input id="input-foot-length" name="foot-length" type="number" class="form-control"  placeholder="11" />
-                                <small id="foot-length-help" class="form-text text-muted">
-                                        This is the length of the foot when placed on the ground from back of the heel to top of the big toe. 
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                                <!-- Card 1 - description -->
+                                <p>This will give us the overall anatomy of the finished sock</p>
+
+                                <!-- Card 1 - Cuff length -->
+                                <div class="form-group">
+                                    <label for="input-cuff-length">Target cuff length (inches):</label>
+                                    <input id="input-cuff-length" name="cuff-length" type="number" class="form-control"
+                                        placeholder="2" />
+                                    <small id="cuff-length-help" class="form-text text-muted">A cuff can be above the
+                                        ankle on long socks or on the ankle for ankle socks. If no cuff is desired enter
+                                        0.</small>
+                                </div>
+
+                                <!-- Card 1 - Ankle length -->
+                                <div class="form-group">
+                                    <label for="input-ankle-length">Target ankle length (inches):</label>
+                                    <input id="input-ankle-length" name="ankle-length" type="number"
+                                        class="form-control" placeholder="2" />
+                                    <small id="ankle-length-help" class="form-text text-muted">This is the amount of
+                                        fabric between the cuff and the heel. If no ankle is desired enter 0.</small>
+                                </div>
+
+                                <!-- Card 1 - Foot length -->
+                                <div class="form-group">
+                                    <label for="input-foot-length">Target foot length (inches):</label>
+                                    <input id="input-foot-length" name="foot-length" type="number" class="form-control"
+                                        placeholder="11" />
+                                    <small id="foot-length-help" class="form-text text-muted">
+                                        This is the length of the foot when placed on the ground from back of the heel
+                                        to top of the big toe.
                                         We will automatically subtract .5 inches of negative ease for a snug fit.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
+                                    </small>
+                                </div>
+
+                            </div> <!-- Card 1 - form body -->
+                        </div> <!-- Card 1 - form -->
+                    </div><!-- Card 1 -->
 
                     <!-- Card 2 -->
                     <div class="card">
-                    <div class="card-header" id="headingTwo">
-                        <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Tell us about your CSM and Yarn
-                        </button>
-                        </h5>
-                    </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                        <div class="card-body">
-                            <p>This will help us to write instructions specific to your machine including line numbers for heel turning.</p>
-                            <div class="form-group">
-                                <label for="input-cylinder">Cylinder Size:</label>
-                                <input id="input-cylinder" name="cylinder" type="number" class="form-control"  placeholder="60" />
-                            </div>
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Tell us about your CSM and Yarn
+                                </button>
+                            </h5>
+                        </div> <!-- Card 2 - heading -->
 
-                            <div class="form-group">
-                                <label for="input-target-needles">Target Needles:</label>
-                                <input id="input-target-needles" name="row-target-needles" type="number" class="form-control"  placeholder="10" />
-                                <small id="target-needles-help" class="form-text text-muted">These are the number of needles that DO NOT get worked when making a heel / toe.</small>
-                            </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+                                <!-- Card 2 - description -->
+                                <p>This will help us to write instructions specific to your machine including line
+                                    numbers for heel turning.</p>
 
-                            <div class="form-check">
-                                <input id="input-stretch" type="checkbox" class="form-check-input"/>
-                                <label for="input-stretch" class="form-check-label">Using stretchy yarn</label>
-                                <small id="stretch-help" class="form-text text-muted">This helps us round up or down when we calculate rows.</small>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
+                                <!-- Card 2 - cylinder size -->
+                                <div class="form-group">
+                                    <label for="input-cylinder">Cylinder Size:</label>
+                                    <input id="input-cylinder" name="cylinder" type="number" class="form-control"
+                                        placeholder="60" />
+                                </div>
+
+                                <!-- Card 2 - target needles -->
+                                <div class="form-group">
+                                    <label for="input-target-needles">Target Needles:</label>
+                                    <input id="input-target-needles" name="row-target-needles" type="number"
+                                        class="form-control" placeholder="10" />
+                                    <small id="target-needles-help" class="form-text text-muted">These are the number of
+                                        needles that DO NOT get worked when making a heel / toe.</small>
+                                </div>
+
+                                <!-- Card 2 - stretch -->
+                                <div class="form-check">
+                                    <input id="input-stretch" type="checkbox" class="form-check-input" />
+                                    <label for="input-stretch" class="form-check-label">Using stretchy yarn</label>
+                                    <small id="stretch-help" class="form-text text-muted">This helps us round up or down
+                                        when we calculate rows. A stretchy yarn will have at least 10% nylon.</small>
+                                </div>
+                            </div> <!-- Card 2 - form body -->
+                        </div> <!-- Card 2 - form -->
+                    </div> <!-- Card 2 -->
 
                     <!-- Card 3 -->
                     <div class="card">
-                    <div class="card-header" id="headingThree">
-                        <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            Tell us about your gauge
-                        </button>
-                        </h5>
-                    </div>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                        <div class="card-body">
-                            <p>Knit a 50 row gauge swatch using your desired tension, block/wash the fabric, and then measure gauge.</p>
-                            <div class="form-group">
-                                <label for="input-stitches-per-inch">Stitches per inch (width):</label>
-                                <input id="input-stitches-per-inch" name="stitches-per-inch" type="number" class="form-control"  placeholder="8" />
-                            </div>
-                            <div class="form-group">
-                                <label for="input-row-per-inch">Rows per inch (length):</label>
-                                <input id="input-row-per-inch" name="row-per-inch" type="number" class="form-control"  placeholder="10" />
-                            </div>
-                        </div>
-                    </div>
-                    </div>
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Tell us about your gauge
+                                </button>
+                            </h5>
+                        </div> <!-- Card 3 - heading -->
+
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                            data-parent="#accordion">
+                            <div class="card-body">
+                                <!-- Card 3 description -->
+                                <p>Knit a 50 row gauge swatch using your desired tension, block/wash the fabric, and
+                                    then measure gauge.</p>
+                                
+                                <!-- Card 3 - Stitches per inch -->
+                                <div class="form-group">
+                                    <label for="input-stitches-per-inch">Stitches per inch (width):</label>
+                                    <input id="input-stitches-per-inch" name="stitches-per-inch" type="number"
+                                        class="form-control" placeholder="8" />
+                                </div>
+
+                                <!-- Card 3 - Rows per inch-->
+                                <div class="form-group">
+                                    <label for="input-row-per-inch">Rows per inch (length):</label>
+                                    <input id="input-row-per-inch" name="row-per-inch" type="number"
+                                        class="form-control" placeholder="10" />
+                                </div>
+
+                            </div> <!-- Card 3 form - body -->
+                        </div> <!-- Card 3 - form -->
+                    </div> <!-- Card 3 -->
+
+                    <!-- Card 4 -->
+                    <div class="card">
+                        <div class="card-header" id="headingFour">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    Tell us about your sock construction
+                                </button>
+                            </h5>
+                        </div><!-- Card 4 - heading -->
+
+                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour"
+                            data-parent="#accordion">
+                            <div class="card-body">
+                                <!-- Card 4 - description -->
+                                <p>This is where you can customize your pattern.</p>
+
+                                <!-- Card 4 - Cuff style -->
+                                <div class="form-group">
+                                    <label for="input-cuff-style">Cuff style:</label>
+                                    <select id="input-cuff-style" name="cuff-style">
+                                        <option>None</option>
+                                        <option>Rolled</option>
+                                        <option>Ribbed</option>
+                                        <option>Mock Ribbed</option>
+                                    </select>
+                                </div>
+
+                                <!-- Card 4 - Direction -->
+                                <div class="form-group">
+                                    <label for="input-direction">Construction direction:</label>
+                                    <select id="input-direction" name="direction">
+                                        <option>Toe up</option>
+                                        <option>Cuff down</option>
+                                    </select>
+                                </div>
+
+                                <!-- Card 4 - Large heel -->
+                                <div class="form-check">
+                                    <input id="input-extra-heel" type="checkbox" class="form-check-input" />
+                                    <label for="input-extra-heel" class="form-check-label">Larger heel</label>
+                                    <small id="extra-heel-help" class="form-text text-muted">Increases the amount of
+                                        fabric used to create the heel for those who have larger heels.</small>
+                                </div>
+
+                                <!-- Card 4 - Heel needles -->
+                                <div class="form-group d-none" id="heelNeedles">
+                                    <label for="input-heel-needles" class="form-check-label">Heel needles:</label>
+                                    <input id="input-heel-needles" name="heel-needles" type="number"
+                                        class="form-control" placeholder="10" />
+                                    <small id="heel-needles-help" class="form-text text-muted">
+                                        The number of additional needles that will be worked for a larger heel.
+                                    </small>
+                                </div>
+
+                            </div> <!-- Card 4 - form body -->
+                        </div> <!-- Card 4 - form -->
+                    </div> <!-- Card 4 -->
                 </div>
-        
+
                 <button type="generate" class="btn btn-primary" id="btn-generate">Generate Pattern</button>
-            </div> <!-- column worksheet -->
-            
-            <div class="col bg-green d-none anatomy" id="anatomy">
-                <h2>Sock Anatomy</h2>
-            </div> <!-- column SUBMISSION-->
-        </div> <!-- row-->
-        <div class="row d-none" id="pattern">
+            </div> <!-- COLUMN - Worksheet -->
 
+            <!-- COLUMN - Diagram -->
+            <div class="col bg-diagram d-none diagram" id="diagram">
+                <!-- Everything in this section will be generated via javascript -->
+            </div> <!-- COLUMN - Diagram -->
+        </div> <!-- ROW - Worksheet and Diagram -->
 
-        </div>
+        <!-- ROW - Pattern -->
+        <div class="row d-none pattern" id="rowpattern">
+            <!-- COLUMN - Pattern -->
+            <div class="col bg-pattern d-none pattern" id="pattern">
+                <!-- Everything in this section will be generated via javascript -->
+            </div> <!-- COLUMN - Pattern -->
+        </div><!-- ROW - Pattern -->
     </div> <!-- container -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+    <script src="js/worksheet.js"></script>
+    <script src="js/sockdiagram.js"></script>
+    <script src="js/sockpattern.js"></script>
     <script src="js/evaluate.js"></script>
 </body>
+
 </html>
