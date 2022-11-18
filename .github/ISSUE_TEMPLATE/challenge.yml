@@ -5,7 +5,7 @@ labels: ["challenge"]
 body:
 - type: markdown
   attributes: 
-    value: |
+    value: >
       Before submiting a TCK Challenge to the Jakarta Data community 
       please read and be familiar with the TCK Process document (https://jakarta.ee/committees/specification/tckprocess) 
       which may be updated occasionally.
