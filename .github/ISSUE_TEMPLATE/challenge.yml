@@ -1,7 +1,7 @@
 name: TCK Challenge
 description: Jakarta Data TCK Challenge
 title: "[TCK Challenge]: "
-lables: ["challenge"]
+labels: ["challenge"]
 body:
 - type: markdown
   attributes: 
