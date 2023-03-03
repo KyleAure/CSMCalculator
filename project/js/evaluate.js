@@ -3,54 +3,62 @@ console.log("evaluate.js has been loaded");
 // Data fields
 const myWorksheet = new worksheet();
 
-$(document).ready(function () {
-    $('#input-extra-heel').prop('checked', false);
-});
+//Setup page after window is loaded
+window.addEventListener('load', event => {
+    console.log("document has been loaded");
 
-/**
- * Entrypoint, this is what happens when someone clicks 'generate pattern'
- */
-$(function () {
-    //Listen for button click
-    $('#btn-generate').on('click', function () {
+    //Add listener for generate button
+    var generateButton = document.getElementById('btn-generate');
+    generateButton.addEventListener('click', event => {
+        var worksheet = document.getElementById('worksheet');
+        var pattern = document.getElementById('pattern');
 
-        //Reset hidden items from previous submission
-        $('#diagram').addClass('d-none');
-        $('#diagram').text("");
-        $('#pattern').text("");
+        worksheet.classList.add('d-none');
+        while( pattern.firstChild ) {
+            pattern.removeChild(pattern.firstChild);
+        }
 
         loadAndVerifyData();
-        createSockDiagram();
         createSockPattern();
+        createSockDiagram();
+
+        pattern.classList.remove('d-none');
     });
 
-    //Listen for checkbox click
-    $('#input-extra-heel').click(function() {
-        if($('#input-extra-heel').is(':checked')) {
-            $('#heelNeedles').removeClass('d-none');
+    //Handle heel needles when page is refreshed
+    var extraHeel = document.getElementById("input-extra-heel");
+    var heelNeedles = document.getElementById("heelNeedles");
+    if(extraHeel.checked) {
+        heelNeedles.classList.remove('d-none');
+    }
+
+    //Add listener for extra heel toggle
+    extraHeel.addEventListener('click', event => {
+        if(extraHeel.checked) {
+            heelNeedles.classList.remove('d-none');
         } else {
-            $('#heelNeedles').addClass('d-none');
+            heelNeedles.classList.add('d-none');
         }
-    })
-})
+    });
+});
 
 /**
  * Loads in all the data from the worksheet
  */
 function loadAndVerifyData() {
     //Get data from form
-    myWorksheet.setStretchyYarn($('#input-stretch').is(':checked'));
-    myWorksheet.setLargeHeel($('#input-extra-heel').is(':checked'));
-    myWorksheet.setStitchPerInch(Number($('#input-stitches-per-inch').val()));
-    myWorksheet.setRowPerInch(Number($('#input-row-per-inch').val()));
-    myWorksheet.setCuffStyle($('#input-cuff-style').val());
-    myWorksheet.setDirection($('#input-direction').val());
-    myWorksheet.setCuffLength(Number($('#input-cuff-length').val()));
-    myWorksheet.setAnkleLength(Number($('#input-ankle-length').val()));
-    myWorksheet.setFootLength(Number($('#input-foot-length').val()) - 0.5);
-    myWorksheet.setCylinderSize(Number($('#input-cylinder').val()));
-    myWorksheet.setTargetNeedles(Number($('#input-target-needles').val()));
-    myWorksheet.setHeelNeedles(Number($('#input-heel-needles').val()));
+    myWorksheet.setStretchyYarn(document.getElementById("input-stretch").checked);
+    myWorksheet.setLargeHeel(   document.getElementById("input-extra-heel").checked);
+    myWorksheet.setStitchPerInch(Number(document.getElementById("input-stitches-per-inch").value));
+    myWorksheet.setRowPerInch(   Number(document.getElementById("input-row-per-inch").value));
+    myWorksheet.setCuffStyle(document.getElementById("input-cuff-style").value);
+    myWorksheet.setDirection(document.getElementById("input-direction").value);
+    myWorksheet.setCuffLength(   Number(document.getElementById('input-cuff-length').value));
+    myWorksheet.setAnkleLength(  Number(document.getElementById('input-ankle-length').value));
+    myWorksheet.setFootLength(   Number(document.getElementById('input-foot-length').value) - 0.5);
+    myWorksheet.setCylinderSize( Number(document.getElementById('input-cylinder').value));
+    myWorksheet.setTargetNeedles(Number(document.getElementById('input-target-needles').value));
+    myWorksheet.setHeelNeedles(  Number(document.getElementById('input-heel-needles').value));
 }
 
 /**

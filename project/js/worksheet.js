@@ -1,4 +1,4 @@
-const inchToPixelRatio = 20;
+const inchToPixelRatio = 10;
 
 class inches {
     constructor(inch, rowPerInch, roundDown) {
