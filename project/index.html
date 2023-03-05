@@ -26,25 +26,30 @@
         background-color: lavender;
     }
 
-    .bg-card {
-        /* background-color: white; */
-    }
-
     .description {
         margin-left: 1em;
         margin-bottom: 0;
+    }
+
+    .form-group {
+        margin-bottom: 1em;
     }
 </style>
 
 <body>
     <div class="jumbotron text-center">
         <h1>Circular Sock Machine Pattern Generator</h1>
+        <p>Created by: Kyle Aure</p>
     </div>
 
-    <div class="alert alert-success d-none" id="hidden-success-alert">
+    <div class="alert text-center alert-success d-none" id="hidden-success-alert">
     </div>
 
-    <div class="alert alert-danger d-none" id="hidden-danger-alert">
+    <div class="alert text-center alert-warning" id="hidden-warning-alert">
+        🛠️ This page is still under construction 🛠️
+    </div>
+
+    <div class="alert text-center alert-danger d-none" id="hidden-danger-alert">
     </div>
 
     <div class="container bg-worksheet rounded pt-2 pb-2" id="worksheet">
@@ -72,42 +77,81 @@
                         <!-- Card 1 - description -->
                         <p>This will give us the overall anatomy of the finished sock</p>
 
-                        <!-- Card 1 - Cuff length -->
+                        <!-- Card 1 - Cuff -->
                         <div class="form-group">
-                            <label for="input-cuff-length">Target cuff length (inches):</label>
+                            <label for="input-cuff-length">Cuff length:</label>
                             <small id="cuff-length-help" class="form-text text-muted">
                                 A cuff can be above the ankle on long socks or on the ankle for ankle socks.
-                                <br>
-                                If no cuff is desired enter 0.
                             </small>
-                            <input id="input-cuff-length" name="cuff-length" type="number" class="form-control"
-                                placeholder="2" />
+                            <div class="row">
+                                <div class="col">
+                                    <input class="form-control" id="input-cuff-length" name="cuff-length" type="number" class="form-control"
+                                    placeholder="Enter 0 for none" />
+                                </div>
+                                <div class="col">
+                                    <select class="form-select" id="select-cuff-pattern" name="cuff-pattern">
+                                        <option value="stock">Stockenette</option>
+                                        <option value="1x1r">1x1 Rib</option>
+                                        <option value="1x1mr">1x1 Mock Rib</option>
+                                        <option value="1x3r">1x3 Rib</option>
+                                        <option value="1x3mr">1x3 Mock Rib</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <select class="form-select dynamic-item" id="select-cuff-style" name="cuff-style">
+                                        <option value="">Optional</option>
+                                        <option value="hung">Hung hem</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Card 1 - Ankle length -->
+                        <!-- Card 1 - Ankle -->
                         <div class="form-group">
-                            <label for="input-ankle-length">Target ankle length (inches):</label>
+                            <label for="input-ankle-length">Ankle length:</label>
                             <small id="ankle-length-help" class="form-text text-muted">
-                                This is the amount of fabric between the cuff and the heel. 
-                                <br>
-                                If no ankle is desired enter 0.
+                                This is the amount of fabric between the cuff and the heel.
                             </small>
-                            <input id="input-ankle-length" name="ankle-length" type="number" class="form-control"
-                                placeholder="2" />
+                            <div class="row">
+                                <div class="col">
+                                    <input class="form-control" id="input-ankle-length" name="ankle-length" type="number" class="form-control"
+                                    placeholder="Enter 0 for none" />
+                                </div>
+                                <div class="col">
+                                    <select class="form-select" id="select-ankle-pattern" name="ankle-pattern">
+                                        <option value="stock">Stockenette</option>
+                                        <option value="1x1r">1x1 Rib</option>
+                                        <option value="1x1mr">1x1 Mock Rib</option>
+                                        <option value="1x3r">1x3 Rib</option>
+                                        <option value="1x3mr">1x3 Mock Rib</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+
 
                         <!-- Card 1 - Foot length -->
                         <div class="form-group">
-                            <label for="input-foot-length">Target foot length (inches):</label>
+                            <label for="input-foot-length">Foot length:</label>
                             <small id="foot-length-help" class="form-text text-muted">
                                 This is the length of the foot when placed on the ground from back of the heel to top of the big toe.
-                                <br>
-                                We will automatically subtract .5 inches of negative ease for a snug fit.
                             </small>
-                            <input id="input-foot-length" name="foot-length" type="number" class="form-control"
-                                placeholder="11" />
+                            <div class="row">
+                                <div class="col">
+                                    <input id="input-foot-length" name="foot-length" type="number" class="form-control"
+                                    placeholder="A half inch of negative ease is automatically applied" />
+                                </div>
+                                <div class="col">
+                                    <select class="form-select" id="select-foot-pattern" name="foot-pattern">
+                                        <option value="stock">Stockenette</option>
+                                        <option value="1x1r">1x1 Rib</option>
+                                        <option value="1x1mr">1x1 Mock Rib</option>
+                                        <option value="1x3r">1x3 Rib</option>
+                                        <option value="1x3mr">1x3 Mock Rib</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-
                     </div> <!-- Card 1 - form body -->
                 </div> <!-- Card 1 - form -->
             </div><!-- Card 1 -->
@@ -131,28 +175,33 @@
 
                         <!-- Card 2 - cylinder size -->
                         <div class="form-group">
-                            <label for="input-cylinder">Cylinder Size:</label>
-                            <input id="input-cylinder" name="cylinder" type="number" class="form-control"
+                            <label for="input-number-cylinder">Cylinder Size:</label>
+                            <small id="target-cylinder-help" class="form-text text-muted">
+                                The number of needles on your cylinder.
+                            </small>
+                            <input id="input-number-cylinder" name="cylinder" type="number" class="form-control"
                                 placeholder="60" />
                         </div>
 
                         <!-- Card 2 - target needles -->
                         <div class="form-group">
-                            <label for="input-target-needles">Target Needles:</label>
-                            <small id="target-needles-help" class="form-text text-muted">
-                                These are the number of needles that DO NOT get worked when making a heel / toe.
-                            </small>
-                            <input id="input-target-needles" name="row-target-needles" type="number"
-                                class="form-control" placeholder="10" />
-                        </div>
-
-                        <!-- Card 2 - stretch -->
-                        <div class="form-check">
-                            <input id="input-stretch" type="checkbox" class="form-check-input" />
-                            <label for="input-stretch" class="form-check-label">Using stretchy yarn</label>
-                            <small id="stretch-help" class="form-text text-muted">
-                                This helps us round up or down when we calculate rows. A stretchy yarn will have at least 10% nylon.
-                            </small>
+                            <label for="input-number-target-needles">Target Needles:</label>
+                            <div class="row">
+                                <div class="col">
+                                    <small id="heel-needles-help" class="form-text text-muted">
+                                        The number of needles <b>not</b> worked when making a heel/toe
+                                    </small>
+                                    <input id="input-number-target-needles" name="row-target-needles" type="number"
+                                    class="form-control" placeholder="10" />
+                                </div>
+                                <div class="col">
+                                    <small id="heel-needles-help" class="form-text text-muted">
+                                        The <b>total</b> number of needles past the half way mark added for a larger heel.
+                                    </small>
+                                    <input id="input-number-heel-needles" name="heel-needles" type="number" class="form-control"
+                                    placeholder="4 - 2 on each side of the halfway marks" />
+                                </div>
+                            </div>
                         </div>
                     </div> <!-- Card 2 - form body -->
                 </div> <!-- Card 2 - form -->
@@ -176,16 +225,24 @@
 
                         <!-- Card 3 - Stitches per inch -->
                         <div class="form-group">
-                            <label for="input-stitches-per-inch">Stitches per inch (width):</label>
-                            <input id="input-stitches-per-inch" name="stitches-per-inch" type="number"
+                            <label for="input-number-stitches-per-inch">Stitches per inch (width):</label>
+                            <input id="input-number-stitches-per-inch" name="stitches-per-inch" type="number"
                                 class="form-control" placeholder="8" />
                         </div>
 
                         <!-- Card 3 - Rows per inch-->
                         <div class="form-group">
-                            <label for="input-row-per-inch">Rows per inch (length):</label>
-                            <input id="input-row-per-inch" name="row-per-inch" type="number" class="form-control"
+                            <label for="input-number-row-per-inch">Rows per inch (length):</label>
+                            <input id="input-number-row-per-inch" name="row-per-inch" type="number" class="form-control"
                                 placeholder="10" />
+                        </div>
+
+                        <!-- Card 3 - stretch -->
+                        <div class="form-check form-switch">
+                            <input id="input-check-stretch" type="checkbox" class="form-check-input" />
+                            <small id="stretch-help" class="form-text text-muted">
+                                Using stretchy yarn with at least 10% nylon? We will add a little bit more negative ease for a snug fit.
+                            </small>
                         </div>
 
                     </div> <!-- Card 3 form - body -->
@@ -209,44 +266,45 @@
                         <p>This is where you can customize your pattern.</p>
 
                         <!-- Card 4 - Direction -->
-                        <div class="form-group">
-                            <label for="input-direction">Construction direction:</label>
-                            <select id="input-direction" name="direction">
-                                <option>Toe up</option>
-                                <option>Cuff down</option>
-                            </select>
-                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="select-direction">Construction direction:</label>
+                                    <select class="form-select dynamic-item" id="select-direction" name="direction">
+                                        <option value="">Select One</option>
+                                        <option value="toeup">Toe up</option>
+                                        <option value="cuffdown">Cuff down</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <!-- Card 4 - Cuff style -->
-                        <div class="form-group">
-                            <label for="input-cuff-style">Cuff style:</label>
-                            <select id="input-cuff-style" name="cuff-style">
-                                <option>None</option>
-                                <option>Rolled</option>
-                                <option>Ribbed</option>
-                                <option>Mock Ribbed</option>
-                            </select>
-                        </div>
+                            <div class="col d-none" id="form-selvage">
+                                <div class="form-group">
+                                    <label for="select-selvage">Salvage:</label>
+                                    <small id="extra-selvage-help" class="form-text text-muted">
+                                        A selvage will lock in your cast-on edge.
+                                    </small>
+                                    <select class="form-select dynamic-item" id="select-selvage" name="selvage">
+                                        <option value="">Select One</option>
+                                        <option value="hung">Hung hem</option>
+                                        <option value="juana">Juana's cast on</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <!-- Card 4 - Large heel -->
-                        <div class="form-check">
-                            <input id="input-extra-heel" type="checkbox" class="form-check-input" />
-                            <label for="input-extra-heel" class="form-check-label">Larger heel</label>
-                            <small id="extra-heel-help" class="form-text text-muted">
-                                Increases the amount of fabric used to create the heel for those who have larger heels.
-                            </small>
+                            <div class="col d-none" id="form-bind-off">
+                                <div class="form-group">
+                                    <label for="select-bind-off">Bind off:</label>
+                                    <small id="extra-bind-off-help" class="form-text text-muted">
+                                        A bind off will lock in your final row.
+                                    </small>
+                                    <select class="form-select dynamic-item" id="select-bind-off" name="bind-off">
+                                        <option value="">Select One</option>
+                                        <option value="latchhook">Latchhook bind off</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-
-                        <!-- Card 4 - Heel needles -->
-                        <div class="form-group d-none" id="heelNeedles">
-                            <label for="input-heel-needles" class="form-check-label">Heel needles:</label>
-                            <small id="heel-needles-help" class="form-text text-muted">
-                                The number of additional needles that will be worked for a larger heel.
-                            </small>
-                            <input id="input-heel-needles" name="heel-needles" type="number" class="form-control"
-                                placeholder="4" />
-                        </div>
-
                     </div> <!-- Card 4 - form body -->
                 </div> <!-- Card 4 - form -->
             </div> <!-- Card 4 -->
@@ -259,13 +317,27 @@
         <button type="modify" class="btn btn-primary" id="btn-modify">Modify Pattern</button>
     </div> <!-- container -->
 
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 mb-0 text-muted">
+                ⚖️ EPL-2.0 Licensed
+            </div>
+    
+            <div class="col-md-4 mb-0 text-muted text-center">
+                <div style="transform: scaleX(-1); display: inline-block">🐈‍⬛</div>🧶🐈‍⬛
+            </div>
+    
+            <div class="col-md-4 mb-0 text-muted text-end">
+                Open source project: <a href="https://github.com/KyleAure/CSMCalculator">KyleAure/CSMCalculator</a>
+            </div>
+        </footer>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
         crossorigin="anonymous"></script>
-    <script src="js/worksheet.js"></script>
-    <script src="js/sockdiagram.js"></script>
-    <script src="js/sockpattern.js"></script>
-    <script src="js/evaluate.js"></script>
+    <script src="js/entrypoint.js"></script>
 </body>
 
 </html>

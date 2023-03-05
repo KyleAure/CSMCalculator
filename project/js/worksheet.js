@@ -1,203 +1,241 @@
 const inchToPixelRatio = 10;
+const canvasBuffer = 5;
+const canvasPixelBuffer = 20;
 
-class inches {
-    constructor(inch, rowPerInch, roundDown) {
-        this.inch = inch;
-        this.rowPerInch = rowPerInch;
-        this.roundDown = roundDown;
-    }
-    inches() {
-        return this.inch;
-    }
-    pixles() {
-        return this.inch * inchToPixelRatio;
-    }
-    rows() {
-        if(this.roundDown) {
-            return Math.floor(this.inch * this.rowPerInch);
-        } else {
-            return Math.ceil(this.inch * this.rowPerInch);
-        }
-    }
+//Raw data
+var raw = [];
+
+//Data structures
+var gauge;
+var cylinder;
+var sock;
+var construction;
+
+var cuff;
+var ankle;
+var heel;
+var instep;
+var toe;
+
+/**
+ * Entrypoint for worksheet
+ */
+function parse() {
+    //Note order is important here
+    createGauge();
 }
 
-class worksheet {
-    //bool
-    #stretchyYarn;
-    #largeHeel;
+/**
+ * Card 1
+ *   "input-cuff-length" "select-cuff-pattern" "input-ankle-length" "select-ankle-pattern" "input-foot-length" "select-foot-pattern",
+ * Card 2
+ *   "input-number-cylinder" "input-number-target-needles" "input-number-heel-needles",
+ * Card 3
+ *   "input-number-stitches-per-inch" "input-number-row-per-inch" "input-check-stretch",
+ * Card 4
+ *   select-direction" "select-selvage" "select-bind-off"
+ */
+function collectRawData(key) {
+    var val;
 
-    //ratio
-    #stitchPerInch;
-    #rowPerInch;
-
-    //string
-    #cuffStyle;
-    #direction;
-    
-    //inches
-    #cuffLength;
-    #ankleLength;
-    #footLength; 
-    
-    //integers
-    #cylinderSize;
-    #targetNeedles;
-    #heelNeedles;
-
-    // Constructor
-    constructor() {}
-
-    // SETTERS
-    setStretchyYarn(stretchyYarn) {
-        if (typeof stretchyYarn !== 'boolean') {
-            throw 'Invalid type for heel';
-        }
-        this.#stretchyYarn = stretchyYarn;
-    }
-
-    setLargeHeel(largeHeel) {
-        if (typeof largeHeel !== 'boolean') {
-            throw 'Invalid type for heel';
-        }
-        this.#largeHeel = largeHeel;
-    }
-
-
-    setStitchPerInch(stitchPerInch) {
-        if (typeof stitchPerInch !== "number" || stitchPerInch < 0) {
-            throw 'Invalid stitches per inch';
-        }
-        this.#stitchPerInch = stitchPerInch;
-    }
-
-    setRowPerInch(rowPerInch) {
-        if (typeof rowPerInch !== "number" || rowPerInch < 0) {
-            throw 'Invalid rows per inch';
-        }
-        this.#rowPerInch = rowPerInch;
-    }
-
-
-    setCuffStyle(cuffStyle) {
-        if (typeof cuffStyle !== "string") {
-            throw 'Invalid type for Cuff Style';
-        }
-        this.#cuffStyle = cuffStyle;
-    }
-
-    setDirection(direction) {
-        if (typeof direction !== "string") {
-            throw 'Invalid type for direction';
-        }
-        this.#direction = direction;
-    }
-
-
-    setCuffLength(cuffLength) {
-        if (typeof cuffLength !== "number" || cuffLength < 0) {
-            this.cuffLength = new Inches(cuffLength);
-        }
-        this.#cuffLength = new inches(cuffLength, this.#rowPerInch, this.#stretchyYarn);
-    }
-
-    setAnkleLength(ankleLength) {
-        if (typeof ankleLength !== "number" || ankleLength < 0) {
-            throw 'Invalid ankle length';
-        }
-        this.#ankleLength = new inches(ankleLength, this.#rowPerInch, this.#stretchyYarn);
-    }
-
-    setFootLength(footLength) {
-        if (typeof footLength !== "number" || footLength < 0) {
-            throw 'Invalid foot length';
-        }
-        this.#footLength = new inches(footLength, this.#footLength, this.#stretchyYarn);
-    }
-
-    setCylinderSize(cylinderSize) {
-        if (typeof cylinderSize !== "number" || cylinderSize < 0 || ! Number.isInteger(cylinderSize)) {
-            throw 'Invalid cylinder size';
-        }
-        this.#cylinderSize = cylinderSize;
-    }
-
-    setTargetNeedles(targetNeedles) {
-        if (typeof targetNeedles !== "number" || targetNeedles < 0 || ! Number.isInteger(targetNeedles)) {
-            throw 'Invalid target needles';
-        }
-        this.#targetNeedles = targetNeedles;
-    }
-
-    setHeelNeedles(heelNeedles) {
-        if (typeof heelNeedles !== "number" || heelNeedles < 0 || ! Number.isInteger(heelNeedles)) {
-            throw 'Invalid target needles';
-        }
-        this.#heelNeedles = heelNeedles;
-    }
-
-    // GETTERS
-    getStretchyYarn() {
-        return this.#stretchyYarn;
-    }
-    getLargeHeel() {
-        return this.#largeHeel;
-    }
-    getStitchPerInch() {
-        return this.#stitchPerInch;
-    }
-    getRowPerInch() {
-        return this.#rowPerInch;
-    }
-    getCuffStyle() {
-        return this.#cuffStyle;
-    }
-    getDirection() {
-        return this.#direction;
-    }
-    getCuffLength() {
-        return this.#cuffLength;
-    }
-    getAnkleLength() {
-        return this.#ankleLength;
-    }
-    getFootLength() {
-        return this.#footLength;
-    }
-    getCylinderSize() {
-        return this.#cylinderSize;
-    }
-    getTargetNeedles() {
-        return this.#targetNeedles;
-    }
-    getHeelNeedles() {
-        return this.#heelNeedles;
-    }
-}
-
-// CALCULATIONS
-function calcSockWidth(worksheetInstance) {
-    return new inches((worksheetInstance.getCylinderSize() / 2) / worksheetInstance.getStitchPerInch(), worksheetInstance.getRowPerInch(), worksheetInstance.getStretchyYarn());
-}
-
-function calcInstep(worksheetInstance) {
-    var heelVarianceInInches = (calcHeelNeedlesWorked(worksheetInstance) - 2) / worksheetInstance.getRowPerInch();
-
-    var toeNeedlesWorked = (worksheetInstance.getCylinderSize() / 2) - worksheetInstance.getTargetNeedles();
-    var toeVarianceInInches = (toeNeedlesWorked - 2) / worksheetInstance.getRowPerInch();
-
-    var result = worksheetInstance.getFootLength().inches() - heelVarianceInInches - toeVarianceInInches;
-    
-    return new inches(result, worksheetInstance.getRowPerInch(), worksheetInstance.getStretchyYarn());
-}
-
-function calcHeelNeedlesWorked(worksheetInstance) {
-    return calcHeelNeedles(worksheetInstance) - worksheetInstance.getTargetNeedles();
-}
-
-function calcHeelNeedles(worksheetInstance) {
-    if(worksheetInstance.getLargeHeel()) {
-        return (worksheetInstance.getCylinderSize() / 2) + worksheetInstance.getHeelNeedles();
+    if(key.startsWith("input-number")) {
+        val = Number(document.getElementById(key).value);
+    } else if(key.startsWith("input-check")) {
+        val = document.getElementById(key).checked;
     } else {
-        return (worksheetInstance.getCylinderSize() / 2);
+        val = document.getElementById(key).value;
+    }
+
+    console.info("Returning key: " + key + " val: " + val);
+    return val;
+}
+
+function createGauge() {
+    gauge = {
+       stPerInch: collectRawData("input-number-stitches-per-inch"),
+       rowPerInch: collectRawData("input-number-row-per-inch"),
+       roundDown: collectRawData("input-check-stretch"),
+    };
+    console.debug(gauge);
+    createCylinder();
+}
+
+function createCylinder() {
+    var size = collectRawData("input-number-cylinder");
+    var targetNeedles = collectRawData("input-number-target-needles");
+    var heelNeedles = collectRawData("input-number-heel-needles");
+    cylinder = {
+        needles: {
+            total: size,
+            half: size / 2,
+            heel: heelNeedles, 
+            target: targetNeedles,
+        },
+        rows: {
+            heel: (size / 2) - targetNeedles + heelNeedles,
+            toe: (size / 2) - targetNeedles,
+        },
+    };
+    console.debug(cylinder);
+    createSock();
+}
+
+function createSock() {
+    sock = {
+        width: cylinder.needles.total / gauge.stPerInch,
+    }
+    console.debug(sock);
+    createConstruction();
+}
+
+function createConstruction() {
+    construction = {
+        direction: collectRawData("select-direction"),
+        selvage: collectRawData("select-selvage"),
+        bindoff: collectRawData("select-bind-off"),
+    };
+    console.debug(construction);
+    createCuff();
+}
+
+function createCuff() {
+    var size = collectRawData("input-cuff-length");
+    var style = collectRawData("select-cuff-style");
+
+    var rows;
+    if(construction.selvage === "hung" || style === "hung") {
+        rows = ConvertSize.inchToRows(size * 2);
+    } else {
+        rows = ConvertSize.inchToRows(size);
+    }
+
+    cuff = {
+        rows: rows,
+        length: {
+            inches: size,
+            pixels: ConvertSize.inchToPixels(size),
+        },
+        width: {
+            inches: sock.width,
+            pixels: ConvertSize.inchToPixels(sock.width),
+        },
+        position: {
+            x: canvasBuffer,
+            y: canvasBuffer,
+        },
+        pattern: getSubPattern(collectRawData("select-cuff-pattern")),
+        style: style,
+    }
+
+    console.debug(cuff);
+    createAnkle();
+}
+
+function createAnkle() {
+    var size = collectRawData("input-ankle-length");
+
+    ankle = {
+        rows: ConvertSize.inchToRows(size),
+        length: {
+            inches: size,
+            pixels: ConvertSize.inchToPixels(size),
+        },
+        width: {
+            inches: sock.width,
+            pixels: ConvertSize.inchToPixels(sock.width),
+        },
+        position: {
+            x: canvasBuffer,
+            y: canvasBuffer + cuff.length.pixels,
+        },
+        pattern: getSubPattern(collectRawData("select-ankle-pattern")),
+    }
+    console.debug(cuff);
+    createHeel();
+}
+
+function createHeel() {
+    heel = {
+        width: {
+            inches: sock.width,
+            pixels: ConvertSize.inchToPixels(sock.width),
+        },
+        position: {
+            x: canvasBuffer + ankle.width.pixels,
+            y: canvasBuffer + cuff.length.pixels + ankle.length.pixels,
+        },
+        geometry: {
+            radius: ankle.width.pixels,
+            startAngle: (Math.PI / 180) * 90,
+            endAngle: (Math.PI / 180) * 180,
+            counterClockwise: false
+        },
+        pattern: getStockenette(),
+    }
+    console.debug(heel);
+    createInstep();
+}
+
+function createInstep() {
+    var footSize = collectRawData("input-foot-length");
+    var heelInstep = ConvertSize.rowsToInch(cylinder.rows.heel) / 2;
+    var toeInstep = ConvertSize.rowsToInch(cylinder.rows.toe) / 2;
+    var instepSize = footSize - heelInstep - toeInstep; 
+    instep = {
+        rows: ConvertSize.inchToRows(instepSize),
+        length: {
+            inches: instepSize,
+            pixels: ConvertSize.inchToPixels(instepSize),
+        },
+        width: {
+            inches: sock.width,
+            pixels: ConvertSize.inchToPixels(sock.width),
+        },
+        position: {
+            x: canvasBuffer + ankle.width.pixels,
+            y: canvasBuffer + cuff.length.pixels + ankle.length.pixels,
+        },
+        pattern: getSubPattern(collectRawData("select-foot-pattern")),
+    }
+    console.debug(instep);
+    createToe();
+}
+
+function createToe() {
+    toe = {
+        width: {
+            inches: sock.width,
+            pixels: ConvertSize.inchToPixels(sock.width),
+        },
+        position: {
+            x: canvasBuffer + ankle.width.pixels + instep.length.pixels,
+            y: canvasBuffer + cuff.length.pixels + ankle.length.pixels + (instep.width.pixels / 2),
+        },
+        geometry: {
+            radius: cuff.width.pixels / 2,
+            startAngle: (Math.PI / 180) * 270,
+            endAngle: (Math.PI / 180) * 90,
+            counterClockwise: false
+        },
+        pattern: getStockenette(),
+    }
+    console.debug(toe);
+}
+
+class ConvertSize {
+    static inchToPixels(size) {
+        return size * inchToPixelRatio;
+    }
+
+    static inchToRows(size) {
+        if(gauge.roundDown) {
+            return Math.floor(size * gauge.rowPerInch);
+        } else {
+            return Math.ceil(size * gauge.rowPerInch);
+        }
+    }
+
+    static rowsToInch(rows) {
+        return rows / gauge.rowPerInch;
     }
 }
