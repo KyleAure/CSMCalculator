@@ -1,16 +1,12 @@
-const inchToPixelRatio = 10;
-const canvasBuffer = 5;
-const canvasPixelBuffer = 20;
-
-//Raw data
+// Raw data
 var raw = [];
 
-//Data structures
+// Data structures
 var gauge;
 var cylinder;
-var sock;
 var construction;
 
+// Sock elements
 var cuff;
 var ankle;
 var heel;
@@ -46,7 +42,7 @@ function collectRawData(key) {
         val = document.getElementById(key).value;
     }
 
-    console.info("Returning key: " + key + " val: " + val);
+    //console.info("Returning key: " + key + " val: " + val);
     return val;
 }
 
@@ -56,35 +52,27 @@ function createGauge() {
        rowPerInch: collectRawData("input-number-row-per-inch"),
        roundDown: collectRawData("input-check-stretch"),
     };
+
     console.debug(gauge);
     createCylinder();
 }
 
 function createCylinder() {
-    var size = collectRawData("input-number-cylinder");
-    var targetNeedles = collectRawData("input-number-target-needles");
-    var heelNeedles = collectRawData("input-number-heel-needles");
+    var total = collectRawData("input-number-cylinder");
+    
     cylinder = {
         needles: {
-            total: size,
-            half: size / 2,
-            heel: heelNeedles, 
-            target: targetNeedles,
+            total: total,
+            half: total / 2,
+            heel: collectRawData("input-number-heel-needles"), 
+            target: collectRawData("input-number-target-needles"),
         },
-        rows: {
-            heel: (size / 2) - targetNeedles + heelNeedles,
-            toe: (size / 2) - targetNeedles,
-        },
+        fabric: {
+            width: total / gauge.stPerInch,
+        }
     };
-    console.debug(cylinder);
-    createSock();
-}
 
-function createSock() {
-    sock = {
-        width: cylinder.needles.total / gauge.stPerInch,
-    }
-    console.debug(sock);
+    console.debug(cylinder);
     createConstruction();
 }
 
@@ -94,37 +82,22 @@ function createConstruction() {
         selvage: collectRawData("select-selvage"),
         bindoff: collectRawData("select-bind-off"),
     };
+
     console.debug(construction);
     createCuff();
 }
 
 function createCuff() {
-    var size = collectRawData("input-cuff-length");
-    var style = collectRawData("select-cuff-style");
+    var length = collectRawData("input-number-cuff-length");
 
-    var rows;
-    if(construction.selvage === "hung" || style === "hung") {
-        rows = ConvertSize.inchToRows(size * 2);
-    } else {
-        rows = ConvertSize.inchToRows(size);
+    if( construction.selvage === "hung" ) {
+        length *= 2;
     }
 
     cuff = {
-        rows: rows,
-        length: {
-            inches: size,
-            pixels: ConvertSize.inchToPixels(size),
-        },
-        width: {
-            inches: sock.width,
-            pixels: ConvertSize.inchToPixels(sock.width),
-        },
-        position: {
-            x: canvasBuffer,
-            y: canvasBuffer,
-        },
-        pattern: getSubPattern(collectRawData("select-cuff-pattern")),
-        style: style,
+        rows: ConvertSize.inchToRows(length),
+        length: length,
+        style: collectRawData("select-cuff-pattern"),
     }
 
     console.debug(cuff);
@@ -132,101 +105,64 @@ function createCuff() {
 }
 
 function createAnkle() {
-    var size = collectRawData("input-ankle-length");
+    var length = collectRawData("input-number-ankle-length");
 
     ankle = {
-        rows: ConvertSize.inchToRows(size),
-        length: {
-            inches: size,
-            pixels: ConvertSize.inchToPixels(size),
-        },
-        width: {
-            inches: sock.width,
-            pixels: ConvertSize.inchToPixels(sock.width),
-        },
-        position: {
-            x: canvasBuffer,
-            y: canvasBuffer + cuff.length.pixels,
-        },
-        pattern: getSubPattern(collectRawData("select-ankle-pattern")),
+        rows: ConvertSize.inchToRows(length),
+        length: length,
+        style: collectRawData("select-ankle-pattern")
     }
-    console.debug(cuff);
+
+    console.debug(ankle);
     createHeel();
 }
 
 function createHeel() {
-    heel = {
-        width: {
-            inches: sock.width,
-            pixels: ConvertSize.inchToPixels(sock.width),
-        },
-        position: {
-            x: canvasBuffer + ankle.width.pixels,
-            y: canvasBuffer + cuff.length.pixels + ankle.length.pixels,
-        },
-        geometry: {
-            radius: ankle.width.pixels,
-            startAngle: (Math.PI / 180) * 90,
-            endAngle: (Math.PI / 180) * 180,
-            counterClockwise: false
-        },
-        pattern: getStockenette(),
-    }
-    console.debug(heel);
-    createInstep();
-}
+    var rows = cylinder.needles.half - cylinder.needles.target + cylinder.needles.heel;
 
-function createInstep() {
-    var footSize = collectRawData("input-foot-length");
-    var heelInstep = ConvertSize.rowsToInch(cylinder.rows.heel) / 2;
-    var toeInstep = ConvertSize.rowsToInch(cylinder.rows.toe) / 2;
-    var instepSize = footSize - heelInstep - toeInstep; 
-    instep = {
-        rows: ConvertSize.inchToRows(instepSize),
+    heel = {
+        rows: rows,
         length: {
-            inches: instepSize,
-            pixels: ConvertSize.inchToPixels(instepSize),
+            cuff:   ConvertSize.rowsToInch(rows / 2),
+            instep: ConvertSize.rowsToInch(rows / 2),
         },
-        width: {
-            inches: sock.width,
-            pixels: ConvertSize.inchToPixels(sock.width),
-        },
-        position: {
-            x: canvasBuffer + ankle.width.pixels,
-            y: canvasBuffer + cuff.length.pixels + ankle.length.pixels,
-        },
-        pattern: getSubPattern(collectRawData("select-foot-pattern")),
+        style: "stock",
     }
-    console.debug(instep);
+
+    console.debug(heel);
     createToe();
 }
 
 function createToe() {
+    var rows = cylinder.needles.half - cylinder.needles.target;
+
     toe = {
-        width: {
-            inches: sock.width,
-            pixels: ConvertSize.inchToPixels(sock.width),
+        rows: rows,
+        length: {
+            instep: ConvertSize.rowsToInch(rows / 2),
+            top:    ConvertSize.rowsToInch(rows / 2),
         },
-        position: {
-            x: canvasBuffer + ankle.width.pixels + instep.length.pixels,
-            y: canvasBuffer + cuff.length.pixels + ankle.length.pixels + (instep.width.pixels / 2),
-        },
-        geometry: {
-            radius: cuff.width.pixels / 2,
-            startAngle: (Math.PI / 180) * 270,
-            endAngle: (Math.PI / 180) * 90,
-            counterClockwise: false
-        },
-        pattern: getStockenette(),
+        style: "stock",
     }
+
     console.debug(toe);
+    createInstep();
+}
+
+function createInstep() {
+    var totalSize = collectRawData("input-number-foot-length");
+    var instepSize = totalSize - heel.length.instep - toe.length.instep; 
+    
+    instep = {
+        rows: ConvertSize.inchToRows(instepSize),
+        length: instepSize,
+        style: collectRawData("select-foot-pattern")
+    }
+
+    console.debug(instep);
 }
 
 class ConvertSize {
-    static inchToPixels(size) {
-        return size * inchToPixelRatio;
-    }
-
     static inchToRows(size) {
         if(gauge.roundDown) {
             return Math.floor(size * gauge.rowPerInch);

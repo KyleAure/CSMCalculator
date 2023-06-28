@@ -1,10 +1,10 @@
+// This is the entrypoint for the site.
 console.info("entrypoint.js is loaded");
 
 //Once window is loaded, load other javascript files
 window.addEventListener('load', event=> {
     includeProjectFiles();
     handleReload();
-    addCuffStyleListener()
     addConstructionListener();
     addGenerateButtonListener();
 })
@@ -15,7 +15,7 @@ window.addEventListener('load', event=> {
 function includeProjectFiles() {
     var dir = "js/";
     var extension = ".js";
-    var files = [ 'worksheet', 'pattern', 'diagram' ];
+    var files = [ 'worksheet', 'pattern' ];
 
     for(var file of files) {
         var path = dir + file + extension;
@@ -56,26 +56,9 @@ function addGenerateButtonListener() {
 
         parse();
         createPattern();
-        draw();
 
         pattern.classList.remove('d-none');
     });
-}
-
-function addCuffStyleListener() {
-    var cuffStyle = document.getElementById("select-cuff-style");
-    cuffStyle.addEventListener("change", event => {
-        var changedTo = document.getElementById(event.target.id).value;
-        var selvage = document.getElementById("select-selvage");
-        if(changedTo === "hung") {
-            selvage.value = "hung";
-            selvage.setAttribute("disabled", "");
-        }
-        if(changedTo === "") {
-            selvage.selectedIndex = 0;
-            selvage.removeAttribute("disabled");
-        }
-    })
 }
 
 function addConstructionListener() {

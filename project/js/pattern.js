@@ -1,3 +1,5 @@
+// This constructs the pattern
+
 class patternElement {
     sectionNum;
     stepNumber;
@@ -41,20 +43,18 @@ class patternElement {
         cardRow.className = "row g-0 bg-card rounded my-2";
         this.element.appendChild(cardRow);
 
-        var cardColumnImage = document.createElement('div');
-        cardColumnImage.className = "col-md-3 align-self-center";
-        cardRow.appendChild(cardColumnImage);
-
-        var cardColumnBody = document.createElement('div');
-        cardColumnBody.className = "col-md-9 align-self-center";
-        cardRow.appendChild(cardColumnBody);
-
         var card = document.createElement('div');
         card.className = "card";
-        cardColumnBody.appendChild(card);
+        card.style = "flex-direction: row;"
+        cardRow.appendChild(card);
+
+        var cardImg = document.createElement('img');
+        cardImg.className = "col-md-3 img-fluid rounded-left";
+        cardImg.src = image;
+        card.appendChild(cardImg);
 
         var cardBody = document.createElement('div');
-        cardBody.className = "card-body";
+        cardBody.className = "col-md-9 card-body";
         card.appendChild(cardBody);
 
         var cardTitle = document.createElement('h5');
@@ -66,14 +66,9 @@ class patternElement {
         cardText.textContent = description;
         cardBody.appendChild(cardText);
 
-        var cardImg = document.createElement('img');
-        cardImg.className = "img-fluid rounded";
-        cardImg.src = image;
-        cardColumnImage.appendChild(cardImg);
-
         this.cardList = document.createElement("ul");
         this.cardList.className = "list-group list-group-flush";
-        card.appendChild(this.cardList);
+        cardBody.appendChild(this.cardList);
     }
 
     appendStep(step) {
@@ -82,10 +77,13 @@ class patternElement {
         cardListItem.id = "step" + this.sectionNum + this.stepNumber;
         cardListItem.textContent = step;
         cardListItem.addEventListener("click", event => {
+            if(cardListItem !== event.target)
+                return; //Avoid applying event listener to children
+
             var thisCardListItem = document.getElementById(event.target.id);
             var sockCount = thisCardListItem.childElementCount;
 
-            console.log("On click count: " + thisCardListItem.childElementCount);
+            // console.log("On click count: " + thisCardListItem.childElementCount);
 
             if(sockCount === 0) {
                 var badge = document.createElement("span");
@@ -159,8 +157,8 @@ function toeUp() {
 
     pattern.createCard("Create toe");
     pattern.appendStep("Lift " + cylinder.needles.half + " needles out of work");
-    pattern.appendStep("Work " +  cylinder.rows.toe + " rows of decreases until " + cylinder.needles.target + " needles are left in work");
-    pattern.appendStep("Work " +  cylinder.rows.toe + " rows of increases until " + cylinder.needles.half + " needles are back in work");
+    pattern.appendStep("Work " + toe.rows / 2 + " rows of decreases until " + cylinder.needles.target + " needles are left in work");
+    pattern.appendStep("Work " + toe.rows / 2 + " rows of increases until " + cylinder.needles.half   + " needles are back in work");
     pattern.appendStep("Put all needles into working position");
     pattern.appendStep("Pick up stitches from the beginning of toe and place them onto the working needles");
     pattern.endCard();
@@ -171,8 +169,8 @@ function toeUp() {
 
     pattern.createCard("Knit heel");
     pattern.appendStep("Lift " + ( cylinder.needles.half - cylinder.needles.heel ) + " needles out of work");
-    pattern.appendStep("Work " +  cylinder.rows.heel + " rows of decreases until " + cylinder.needles.target + " needles are left in work");
-    pattern.appendStep("Work " +  cylinder.rows.heel + " rows of increases until " + ( cylinder.needles.half + cylinder.needles.heel ) + " needles are back in work");
+    pattern.appendStep("Work " + heel.rows / 2 + " rows of decreases until " + cylinder.needles.target + " needles are left in work");
+    pattern.appendStep("Work " + heel.rows / 2 + " rows of increases until " + ( cylinder.needles.half + cylinder.needles.heel ) + " needles are back in work");
     pattern.appendStep("Put all needles into working position");
     pattern.endCard();
 
@@ -221,6 +219,12 @@ function cuffDown() {
     + "You may also need to add a cast on selvage "
     );
 
+    pattern.createCard("Casting On", "Click on each step to mark complete");
+    pattern.appendStep("Hang setup bonnet on every other needle of your  " + cylinder.needles.total + " needle cylinder");
+    pattern.appendStep("Knit 15 rounds with waste yarn");
+    pattern.appendStep("Knit 1 round with ravel cord");
+    pattern.endCard();
+
     if(cuff.rows > 0) {
         pattern.createCard("Knit cuff");
         pattern.appendStep("Knit " + cuff.rows + " rows");
@@ -235,8 +239,8 @@ function cuffDown() {
 
     pattern.createCard("Knit heel");
     pattern.appendStep("Lift " + ( cylinder.needles.half - cylinder.needles.heel ) + " needles out of work");
-    pattern.appendStep("Work " +  cylinder.rows.heel + " rows of decreases until " + cylinder.needles.target + " needles are left in work");
-    pattern.appendStep("Work " +  cylinder.rows.heel + " rows of increases until " + ( cylinder.needles.half + cylinder.needles.heel ) + " needles are back in work");
+    pattern.appendStep("Work " + heel.rows / 2 + " rows of decreases until " + cylinder.needles.target + " needles are left in work");
+    pattern.appendStep("Work " + heel.rows / 2 + " rows of increases until " + ( cylinder.needles.half + cylinder.needles.heel ) + " needles are back in work");
     pattern.appendStep("Put all needles into working position");
     pattern.endCard();
 
@@ -244,10 +248,10 @@ function cuffDown() {
     pattern.appendStep("Knit " + instep.rows + " rows");
     pattern.endCard();
 
-    pattern.createCard("Create toe", "Working the toe and hanging the stitches");
+    pattern.createCard("Create toe");
     pattern.appendStep("Lift " + cylinder.needles.half + " needles out of work");
-    pattern.appendStep("Work " +  cylinder.rows.toe + " rows of decreases until " + cylinder.needles.target + " needles are left in work");
-    pattern.appendStep("Work " +  cylinder.rows.toe + " rows of increases until " + cylinder.needles.half + " needles are back in work");
+    pattern.appendStep("Work " + toe.rows / 2 + " rows of decreases until " + cylinder.needles.target + " needles are left in work");
+    pattern.appendStep("Work " + toe.rows / 2 + " rows of increases until " + cylinder.needles.half   + " needles are back in work");
     pattern.appendStep("Put all needles into working position");
     pattern.endCard();
 
